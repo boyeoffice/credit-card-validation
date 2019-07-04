@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+    *, ::after, ::before {
+    box-sizing: inherit;
+    }
+    body{
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      height: 100vh;
+      color: #2c2c2c;
+      font-size: 14px;
+      font-family: "Robot", "Montserrat", "Helvetica Neue", Arial, sans-serif;
+    }
+    #app {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .container {
+      width: 100%;
+      max-width: 40%;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    .card {
+      position: relative;
+      width: 100%;
+      border-radius: 0.1875rem;
+      box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+     background-clip: border-box;
+     min-height: 0;
+     overflow: hidden;
+    }
+    .card-header {
+      padding: 0 1.25rem;
+    }
+    .card .card-body {
+      padding: 1.25rem;
+      min-height: 190px;
+      flex: 1 1 auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .form-group span {
+      color: #db1f1f;
+      vertical-align: middle;
+    }
+    .form-control {
+      outline: none;
+      font-size: 15px;
+      color: #444;
+      border: none;
+      width: 100%;
+      display: inline-block;
+      background: transparent;
+      font-family: 'Muli', sans-serif;
+      text-align: center;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(174, 168, 168, 0.9);
+      padding-bottom: 10px;
+    }
+    .form-control:focus {
+      border-bottom: #000 1px solid;
+    }
+    .form-control::placeholder {
+      color: #c0c1c2;
+    }
+    .form-group .error {
+      border-bottom: solid 1px #db1f1f;
+    }
+    .form-group .col {
+      width: 27%;
+    }
+    .col.left {
+      float: left;
+    }
+    .col.right {
+      float: right;
+    }
+    .footer {
+      margin-bottom: 20px;
+    }
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .text-center {
+      text-align: center;
+    }
+    form{
+      overflow: hidden;
+    }
+    .btn {
+      width: 100%;
+      padding: 15px 0;
+      display: block;
+      background: #007bff;
+      color: #fff;
+      font-weight: 400;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .form-group.button {
+      margin-top: 15px;
+    }
+    .clearfix {
+      clear: both;
+    }
+    .success-info {
+      background-color: #36d51a;
+    }
+    .error-info {
+      background-color: #d51a1a;
+    }
+    .success-info, .error-info {
+      display: none;
+      width: 100%;
+      padding: 20px 0;
+      color: #fff;
+      transition: ease-in-out;
+      
+    }
+    
+    @media (max-width: 991px){
+      .container {
+        max-width: 50%;
+      }
+    }
+    @media (max-width: 640px){
+      .container {
+        max-width: 100%;
+      }
+    }
+  </style>
+  <title>Credit Card Validation</title>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center">Interswitch</h3>
+          <div class="success-info text-center">Your card is valid</div>
+          <div class="error-info text-center">Your card has expired</div>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Full name">
+              </div>
+            <div class="form-group">
+                <input type="text" id="cardnumber" class="form-control" placeholder="Card number">
+                <span></span>
+            </div>
+            <div class="form-group">
+                <div class="col left">
+                    <input type="text" id="exMonth" class="form-control" placeholder="MM">
+                    <span class="error" id="monthError"></span>
+                 </div>
+                 <div class="col left">
+                    <input type="text" id="exYear" class="form-control" placeholder="YY">
+                    <span class="error" id="yearError"></span>
+                 </div>
+                 <div class="col right">
+                    <input type="text" class="form-control" placeholder="CVV">
+                  </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group button">
+                <a href="#" class="btn">Confirm</a>
+            </div>
+          </form>
+        </div>
+        <div class="footer text-center">
+            <span>Designed by</span>
+            <a href="http://olakunleboye.ml" target="_blank">Olakunle Boye</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    const cardInput = document.querySelector('#cardnumber')
+    const cardError = document.querySelectorAll('.form-group span')
+    const monthError = document.querySelector('#monthError')
+    const yearError = document.querySelector('#yearError')
+    cardInput.addEventListener('keypress', evt => {
+                evt = evt ? evt : window.event;
+                let charCode = evt.which ? evt.which : evt.keyCode;
+                if (
+                    charCode > 31 &&
+                    (charCode < 48 || charCode > 57) &&
+                    charCode !== 46
+                ) {
+                  cardInput.classList.add('error')
+                  cardError[0].innerHTML = 'Please enter your card number'
+                    //evt.preventDefault();
+                }else{
+                  cardInput.classList.remove('error')
+                  cardError[0].innerHTML = ''
+                }
+      
+    })
+
+    
+    exYear.addEventListener('blur', () => {
+      checkYear()
+    })
+    exMonth.addEventListener('blur', () => {
+      if(exYear.value){
+        checkYear()
+      }
+    })
+
+    function checkMonth(){
+      const exMonth = document.querySelector('#exMonth')
+      const exYear = document.querySelector('#exYear')
+      const month = exMonth.value
+      const year = exYear.value
+      const exDate = new Date(year + '-' + month + '-01')
+      if(exDate < new Date()){
+        exMonth.classList.add('error')
+        exYear.classList.add('error')
+        monthError.innerHTML = 'Card Expired'
+        yearError.innerHTML = 'Card Expired'
+      }else{
+        exYear.classList.remove('error')
+        exMonth.classList.remove('error')
+        monthError.innerHTML = ''
+        yearError.innerHTML = ''
+      }
+    }
+    function checkYear(){
+      const exMonth = document.querySelector('#exMonth')
+      const exYear = document.querySelector('#exYear')
+      const month = exMonth.value
+      const year = exYear.value
+      const exDate = new Date(year + '-' + month + '-01')
+      if(exDate < new Date()){
+        exMonth.classList.add('error')
+        exYear.classList.add('error')
+        monthError.innerHTML = 'Card Expired'
+        yearError.innerHTML = 'Card Expired'
+      }else{
+        exYear.classList.remove('error')
+        exMonth.classList.remove('error')
+        monthError.innerHTML = ''
+        yearError.innerHTML = ''
+      }
+    }
+
+    const errorInfo = document.querySelector('.error-info')
+    const successInfo = document.querySelector('.success-info')
+    const button = document.querySelector('.btn')
+    button.addEventListener('click', (evt) => {
+      const exMonth = document.querySelector('#exMonth')
+      const exYear = document.querySelector('#exYear')
+      const month = exMonth.value
+      const year = exYear.value
+      const exDate = new Date(year + '-' + month + '-01')
+      if(exDate < new Date()){
+        errorInfo.style.cssText = 'display: block'
+        setTimeout(() => {
+          errorInfo.style.cssText = 'display: none'
+        }, 1000)
+      }else{
+        successInfo.style.cssText = 'display: block'
+        setTimeout(() => {
+          successInfo.style.cssText = 'display: none'
+        }, 1000)
+      }
+      evt.preventDefault()
+
+    })
+  </script>
+</body>
+</html>
